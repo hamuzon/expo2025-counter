@@ -108,7 +108,7 @@
     color: #00333f;
   }
 
-  /* 日本語ボタンだけ特別に強調 */
+  /* 日本語ボタン特別強調（絵文字なし） */
   .lang-buttons button[data-lang="jp"] {
     font-weight: 900;
     color: #ff3b3b;
@@ -134,7 +134,7 @@
     </div>
 
     <h1 id="title">2025 日本万博カウントダウン</h1>
-    <h2 id="subtitle">第<span id="dayDisplay">-</span>日目</h2>
+    <h2 id="subtitle"><span id="dayDisplay">-</span></h2>
 
     <div id="hourDisplay">経過時間: - 時間</div>
     <div id="remainDisplay">再開まで: - 時間</div>
@@ -143,13 +143,9 @@
   </div>
 
 <script>
-  // 万博 開催期間（JST）
-  // 2025年4月13日 10:00 〜 2025年10月13日 18:00 JST
-  // JSTはUTC+9時間
   const startDate = new Date(Date.UTC(2025, 3, 13, 1, 0, 0)); // 4/13 10:00 JST = UTC 1:00
   const endDate = new Date(Date.UTC(2025, 9, 13, 9, 0, 0));   // 10/13 18:00 JST = UTC 9:00
 
-  // 言語テキスト定義
   const texts = {
     jp: {
       title: "2025 日本万博カウントダウン",
@@ -232,76 +228,57 @@
     return new Date(now.getTime() + (9 * 60 * 60 * 1000));
   }
 
-  // {day}などのテンプレート置換
   function formatText(template, data) {
     return template.replace(/{(\w+)}/g, (_, key) => data[key] ?? "");
   }
 
-  // 言語変更関数
   function changeLanguage(lang) {
     if (!texts[lang]) return;
     currentLang = lang;
 
-    // ボタンのactive切り替え
     langButtons.forEach(btn => {
       btn.classList.toggle("active", btn.dataset.lang === lang);
     });
 
     document.documentElement.lang = lang === "jp" ? "ja" : lang;
 
-    // テキストセット
     titleEl.textContent = texts[lang].title;
     footerEl.textContent = texts[lang].footer;
 
-    // 表示更新はupdateCountdownに任せる
     updateCountdown();
   }
 
-  // 日付・時間更新
   function updateCountdown() {
     const nowJST = getJSTDate();
 
-    // 開催開始からの経過時間（時間単位）
     const elapsedMs = nowJST - startDate;
     const elapsedHours = elapsedMs > 0 ? Math.floor(elapsedMs / (1000 * 60 * 60)) : 0;
-
-    // 開催開始からの経過日数（1日目は0-23時間なら1日目）
     const elapsedDays = elapsedMs >= 0 ? Math.floor(elapsedMs / (1000 * 60 * 60 * 24)) + 1 : 0;
 
-    // 終了までの残り時間（時間単位）
     const remainMs = endDate - nowJST;
     const remainHours = remainMs > 0 ? Math.ceil(remainMs / (1000 * 60 * 60)) : 0;
 
-    // 日数表示（負なら0日目）
     dayDisplayEl.textContent = formatText(texts[currentLang].dayLabel, { day: elapsedDays > 0 ? elapsedDays : 0 });
-
-    // 経過時間表示
     hourDisplayEl.textContent = formatText(texts[currentLang].hourElapsed, { hour: elapsedHours });
 
-    // 再開まで表示（開催中は終了まで）
     if (nowJST < startDate) {
-      // 開催前なら「再開まで」＝開始までの時間
       const untilStartHours = Math.ceil((startDate - nowJST) / (1000 * 60 * 60));
       remainDisplayEl.textContent = formatText(texts[currentLang].remain, { hour: untilStartHours });
     } else if (nowJST >= startDate && nowJST <= endDate) {
       remainDisplayEl.textContent = formatText(texts[currentLang].remain, { hour: remainHours });
     } else {
-      // 開催終了後は再開まで0に
       remainDisplayEl.textContent = formatText(texts[currentLang].remain, { hour: 0 });
     }
   }
 
-  // 初期表示
   changeLanguage(currentLang);
 
-  // ボタンクリックで言語変更
   langButtons.forEach(button => {
     button.addEventListener("click", () => {
       changeLanguage(button.dataset.lang);
     });
   });
 
-  // 1秒ごとに更新
   setInterval(updateCountdown, 1000);
 </script>
 </body>
