@@ -135,8 +135,8 @@
   </div>
 
   <script>
-    const startDateJST = new Date(Date.UTC(2025, 3, 12, 15, 0, 0)); // 2025/4/13 0:00 JST
-    const endDateJST = new Date(Date.UTC(2025, 9, 12, 15, 0, 0));   // 2025/10/13 0:00 JST
+    const startDateJST = new Date(Date.UTC(2025, 3, 12, 15, 0, 0)); // 2025/4/13 00:00 JST
+    const endDateJST = new Date(Date.UTC(2025, 9, 12, 15, 0, 0));   // 2025/10/13 00:00 JST
 
     const dayDisplay = document.getElementById("dayDisplay");
     const hourDisplay = document.getElementById("hourDisplay");
@@ -155,7 +155,7 @@
         notStarted: "万博はまだ始まっていません。",
         ended: "万博は終了しました。",
         dayCount: day => `今日は万博の${day}日目です。`,
-        hoursPassed: hours => `開催開始から経過した時間：${hours}時間`,
+        timeSinceStart: (d, h, m, s) => `開催開始から経過した時間：${d}日 ${h}時間${m}分${s}秒`,
         remainToStart: (d, h, m, s) => `再開まで：${d}日 ${h}時間${m}分${s}秒`,
         remainToEnd: (d, h, m, s) => `終了まで：${d}日 ${h}時間${m}分${s}秒`,
         toggleLabel: "EN",
@@ -168,17 +168,13 @@
         notStarted: "The Expo hasn't started yet.",
         ended: "The Expo has ended.",
         dayCount: day => `Today is day ${day} of the Expo.`,
-        hoursPassed: hours => `Hours since opening: ${hours} hours`,
+        timeSinceStart: (d, h, m, s) => `Time since opening: ${d}d ${h}h ${m}m ${s}s`,
         remainToStart: (d, h, m, s) => `Time until opening: ${d}d ${h}h ${m}m ${s}s`,
         remainToEnd: (d, h, m, s) => `Time until closing: ${d}d ${h}h ${m}m ${s}s`,
         toggleLabel: "JP",
         footerText: "Period: Apr 13, 2025 00:00 JST ～ Oct 13, 2025 00:00 JST"
       }
     };
-
-    function pad(num) {
-      return num.toString().padStart(2, '0');
-    }
 
     function formatRemaining(ms) {
       const d = Math.floor(ms / (1000 * 60 * 60 * 24));
@@ -197,7 +193,6 @@
       const t = texts[lang];
 
       if (jstTime < startDateJST) {
-        // 開催前
         const diffMs = startDateJST - jstTime;
         const { d, h, m, s } = formatRemaining(diffMs);
 
@@ -206,23 +201,21 @@
         remainDisplay.textContent = t.remainToStart(d, h, m, s);
 
       } else if (jstTime > endDateJST) {
-        // 開催後
         dayDisplay.textContent = t.ended;
         hourDisplay.textContent = "";
         remainDisplay.textContent = "";
 
       } else {
-        // 開催中
         const diffDays = Math.floor((today - startDateJST) / (1000 * 60 * 60 * 24)) + 1;
         dayDisplay.textContent = t.dayCount(diffDays);
 
         const elapsedMs = jstTime - startDateJST;
-        const elapsedHours = Math.floor(elapsedMs / (1000 * 60 * 60));
-        hourDisplay.textContent = t.hoursPassed(elapsedHours);
+        const { d, h, m, s } = formatRemaining(elapsedMs);
+        hourDisplay.textContent = t.timeSinceStart(d, h, m, s);
 
         const remainMs = endDateJST - jstTime;
-        const { d, h, m, s } = formatRemaining(remainMs);
-        remainDisplay.textContent = t.remainToEnd(d, h, m, s);
+        const remain = formatRemaining(remainMs);
+        remainDisplay.textContent = t.remainToEnd(remain.d, remain.h, remain.m, remain.s);
       }
     }
 
