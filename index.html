@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>万博何日目表示 / Expo Day Counter</title>
+<title>万博カウントダウン</title>
 <style>
+  /* 省略: 以前のスタイルをそのまま使います */
   @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
 
   * {
@@ -58,6 +59,18 @@
     text-shadow:
       0 0 5px #00fff7,
       0 0 15px #00fff7;
+    margin-bottom: 1.2rem;
+  }
+
+  #hourDisplay, #remainDisplay {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #80deea;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  #remainDisplay {
     margin-bottom: 3rem;
   }
 
@@ -65,9 +78,9 @@
     font-size: 0.9rem;
     color: #4dd0e1;
     letter-spacing: 0.1em;
+    user-select: none;
   }
 
-  /* 言語切替ボタン */
   .lang-toggle {
     position: absolute;
     top: 12px;
@@ -86,22 +99,22 @@
     background: rgba(0, 229, 255, 0.3);
   }
 
-  /* Responsive */
   @media (max-width: 480px) {
     .container {
       padding: 2rem 2rem;
       max-width: 320px;
     }
-
     h1 {
       font-size: 2rem;
     }
-
     #dayDisplay {
       font-size: 2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
-
+    #hourDisplay, #remainDisplay {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
     h2 {
       font-size: 1rem;
       margin-bottom: 1.5rem;
@@ -115,7 +128,11 @@
     <h1 id="title">2025 日本万博</h1>
     <h2 id="subtitle">開催からの経過日数カウント</h2>
     <p id="dayDisplay">読み込み中…</p>
-    <div class="footer" id="footer">万博公式サイト風カウントダウン</div>
+    <p id="hourDisplay"></p>
+    <p id="remainDisplay"></p>
+    <div class="footer" id="footer">
+      開催期間: 2025/04/13 00:00 JST ～ 2025/10/13 00:00 JST
+    </div>
   </div>
 
   <script>
@@ -123,12 +140,13 @@
     const endDateJST = new Date(Date.UTC(2025, 9, 12, 15, 0, 0));   // 2025/10/13 JST 0:00
 
     const dayDisplay = document.getElementById("dayDisplay");
+    const hourDisplay = document.getElementById("hourDisplay");
+    const remainDisplay = document.getElementById("remainDisplay");
     const title = document.getElementById("title");
     const subtitle = document.getElementById("subtitle");
-    const footer = document.getElementById("footer");
     const langToggleBtn = document.querySelector(".lang-toggle");
 
-    let lang = 'jp'; // 初期言語は日本語
+    let lang = 'jp';
 
     const texts = {
       jp: {
@@ -138,7 +156,9 @@
         notStarted: "万博はまだ始まっていません。",
         ended: "万博は終了しました。",
         dayCount: day => `今日は万博の${day}日目です。`,
-        footer: "万博公式サイト風カウントダウン",
+        hoursPassed: hours => `開催開始から経過した時間：${hours}時間`,
+        remainToStart: (h, m, s) => `再開まで：${h}時間${m}分${s}秒`,
+        remainToEnd: (h, m, s) => `終了まで：${h}時間${m}分${s}秒`,
         toggleLabel: "EN"
       },
       en: {
@@ -148,16 +168,15 @@
         notStarted: "The Expo hasn't started yet.",
         ended: "The Expo has ended.",
         dayCount: day => `Today is day ${day} of the Expo.`,
-        footer: "Official Expo Day Counter",
+        hoursPassed: hours => `Hours since opening: ${hours} hours`,
+        remainToStart: (h, m, s) => `Time until opening: ${h}h ${m}m ${s}s`,
+        remainToEnd: (h, m, s) => `Time until closing: ${h}h ${m}m ${s}s`,
         toggleLabel: "JP"
       }
     };
 
-    function getTodayJST() {
-      const now = new Date();
-      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-      const jstTime = new Date(utc + (9 * 60 * 60 * 1000));
-      return new Date(jstTime.getFullYear(), jstTime.getMonth(), jstTime.getDate());
+    function pad(num) {
+      return num.toString().padStart(2, '0');
     }
 
     function updateDay() {
@@ -166,15 +185,39 @@
       const jstTime = new Date(utc + (9 * 60 * 60 * 1000));
       const today = new Date(jstTime.getFullYear(), jstTime.getMonth(), jstTime.getDate());
 
-      const diffDays = Math.floor((today - startDateJST) / (1000 * 60 * 60 * 24)) + 1;
-
       const t = texts[lang];
-      if (diffDays < 1) {
+
+      if (jstTime < startDateJST) {
+        // 開催前
+        const diffMs = startDateJST - jstTime;
+        const h = Math.floor(diffMs / (1000 * 60 * 60));
+        const m = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diffMs % (1000 * 60)) / 1000);
+
         dayDisplay.textContent = t.notStarted;
-      } else if (today > endDateJST) {
+        hourDisplay.textContent = "";
+        remainDisplay.textContent = t.remainToStart(h, m, s);
+      } else if (jstTime > endDateJST) {
+        // 開催後
         dayDisplay.textContent = t.ended;
+        hourDisplay.textContent = "";
+        remainDisplay.textContent = "";
       } else {
+        // 開催中
+        const diffDays = Math.floor((today - startDateJST) / (1000 * 60 * 60 * 24)) + 1;
         dayDisplay.textContent = t.dayCount(diffDays);
+
+        // 開催開始から経過時間
+        const elapsedMs = jstTime - startDateJST;
+        const elapsedHours = Math.floor(elapsedMs / (1000 * 60 * 60));
+        hourDisplay.textContent = t.hoursPassed(elapsedHours);
+
+        // 終了までの残り時間
+        const remainMs = endDateJST - jstTime;
+        const rh = Math.floor(remainMs / (1000 * 60 * 60));
+        const rm = Math.floor((remainMs % (1000 * 60 * 60)) / (1000 * 60));
+        const rs = Math.floor((remainMs % (1000 * 60)) / 1000);
+        remainDisplay.textContent = t.remainToEnd(rh, rm, rs);
       }
     }
 
@@ -182,7 +225,6 @@
       const t = texts[lang];
       title.textContent = t.title;
       subtitle.textContent = t.subtitle;
-      footer.textContent = t.footer;
       langToggleBtn.textContent = t.toggleLabel;
     }
 
@@ -194,12 +236,9 @@
 
     langToggleBtn.addEventListener('click', toggleLanguage);
 
-    // 初期表示
     updateTexts();
     dayDisplay.textContent = texts[lang].loading;
     updateDay();
-
-    // 毎秒更新
     setInterval(updateDay, 1000);
   </script>
 </body>
