@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>万博カウントダウン</title>
+<title>Expo 2025 Countdown</title>
 <style>
-  /* 省略: 以前のスタイルをそのまま使います */
   @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
 
   * {
@@ -136,8 +135,8 @@
   </div>
 
   <script>
-    const startDateJST = new Date(Date.UTC(2025, 3, 12, 15, 0, 0)); // 2025/4/13 JST 0:00
-    const endDateJST = new Date(Date.UTC(2025, 9, 12, 15, 0, 0));   // 2025/10/13 JST 0:00
+    const startDateJST = new Date(Date.UTC(2025, 3, 12, 15, 0, 0)); // 2025/4/13 0:00 JST
+    const endDateJST = new Date(Date.UTC(2025, 9, 12, 15, 0, 0));   // 2025/10/13 0:00 JST
 
     const dayDisplay = document.getElementById("dayDisplay");
     const hourDisplay = document.getElementById("hourDisplay");
@@ -157,9 +156,10 @@
         ended: "万博は終了しました。",
         dayCount: day => `今日は万博の${day}日目です。`,
         hoursPassed: hours => `開催開始から経過した時間：${hours}時間`,
-        remainToStart: (h, m, s) => `再開まで：${h}時間${m}分${s}秒`,
-        remainToEnd: (h, m, s) => `終了まで：${h}時間${m}分${s}秒`,
-        toggleLabel: "EN"
+        remainToStart: (d, h, m, s) => `再開まで：${d}日 ${h}時間${m}分${s}秒`,
+        remainToEnd: (d, h, m, s) => `終了まで：${d}日 ${h}時間${m}分${s}秒`,
+        toggleLabel: "EN",
+        footerText: "開催期間: 2025/04/13 00:00 JST ～ 2025/10/13 00:00 JST"
       },
       en: {
         title: "Expo 2025 Japan",
@@ -169,14 +169,23 @@
         ended: "The Expo has ended.",
         dayCount: day => `Today is day ${day} of the Expo.`,
         hoursPassed: hours => `Hours since opening: ${hours} hours`,
-        remainToStart: (h, m, s) => `Time until opening: ${h}h ${m}m ${s}s`,
-        remainToEnd: (h, m, s) => `Time until closing: ${h}h ${m}m ${s}s`,
-        toggleLabel: "JP"
+        remainToStart: (d, h, m, s) => `Time until opening: ${d}d ${h}h ${m}m ${s}s`,
+        remainToEnd: (d, h, m, s) => `Time until closing: ${d}d ${h}h ${m}m ${s}s`,
+        toggleLabel: "JP",
+        footerText: "Period: Apr 13, 2025 00:00 JST ～ Oct 13, 2025 00:00 JST"
       }
     };
 
     function pad(num) {
       return num.toString().padStart(2, '0');
+    }
+
+    function formatRemaining(ms) {
+      const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+      const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((ms % (1000 * 60)) / 1000);
+      return { d, h, m, s };
     }
 
     function updateDay() {
@@ -190,34 +199,30 @@
       if (jstTime < startDateJST) {
         // 開催前
         const diffMs = startDateJST - jstTime;
-        const h = Math.floor(diffMs / (1000 * 60 * 60));
-        const m = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diffMs % (1000 * 60)) / 1000);
+        const { d, h, m, s } = formatRemaining(diffMs);
 
         dayDisplay.textContent = t.notStarted;
         hourDisplay.textContent = "";
-        remainDisplay.textContent = t.remainToStart(h, m, s);
+        remainDisplay.textContent = t.remainToStart(d, h, m, s);
+
       } else if (jstTime > endDateJST) {
         // 開催後
         dayDisplay.textContent = t.ended;
         hourDisplay.textContent = "";
         remainDisplay.textContent = "";
+
       } else {
         // 開催中
         const diffDays = Math.floor((today - startDateJST) / (1000 * 60 * 60 * 24)) + 1;
         dayDisplay.textContent = t.dayCount(diffDays);
 
-        // 開催開始から経過時間
         const elapsedMs = jstTime - startDateJST;
         const elapsedHours = Math.floor(elapsedMs / (1000 * 60 * 60));
         hourDisplay.textContent = t.hoursPassed(elapsedHours);
 
-        // 終了までの残り時間
         const remainMs = endDateJST - jstTime;
-        const rh = Math.floor(remainMs / (1000 * 60 * 60));
-        const rm = Math.floor((remainMs % (1000 * 60 * 60)) / (1000 * 60));
-        const rs = Math.floor((remainMs % (1000 * 60)) / 1000);
-        remainDisplay.textContent = t.remainToEnd(rh, rm, rs);
+        const { d, h, m, s } = formatRemaining(remainMs);
+        remainDisplay.textContent = t.remainToEnd(d, h, m, s);
       }
     }
 
@@ -226,6 +231,7 @@
       title.textContent = t.title;
       subtitle.textContent = t.subtitle;
       langToggleBtn.textContent = t.toggleLabel;
+      document.getElementById("footer").textContent = t.footerText;
     }
 
     function toggleLanguage() {
