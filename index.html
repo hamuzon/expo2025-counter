@@ -160,16 +160,12 @@
       return new Date(jstTime.getFullYear(), jstTime.getMonth(), jstTime.getDate());
     }
 
-    function updateTexts() {
-      const t = texts[lang];
-      title.textContent = t.title;
-      subtitle.textContent = t.subtitle;
-      footer.textContent = t.footer;
-      langToggleBtn.textContent = t.toggleLabel;
-    }
-
     function updateDay() {
-      const today = getTodayJST();
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const jstTime = new Date(utc + (9 * 60 * 60 * 1000));
+      const today = new Date(jstTime.getFullYear(), jstTime.getMonth(), jstTime.getDate());
+
       const diffDays = Math.floor((today - startDateJST) / (1000 * 60 * 60 * 24)) + 1;
 
       const t = texts[lang];
@@ -182,13 +178,12 @@
       }
     }
 
-    function getMsUntilNextMidnightJST() {
-      const now = new Date();
-      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-      const jstNow = new Date(utc + (9 * 60 * 60 * 1000));
-      const jstTomorrow = new Date(jstNow.getFullYear(), jstNow.getMonth(), jstNow.getDate() + 1);
-      const jstTomorrowUtc = Date.UTC(jstTomorrow.getFullYear(), jstTomorrow.getMonth(), jstTomorrow.getDate(), 0, 0, 0);
-      return jstTomorrowUtc - utc;
+    function updateTexts() {
+      const t = texts[lang];
+      title.textContent = t.title;
+      subtitle.textContent = t.subtitle;
+      footer.textContent = t.footer;
+      langToggleBtn.textContent = t.toggleLabel;
     }
 
     function toggleLanguage() {
@@ -204,10 +199,8 @@
     dayDisplay.textContent = texts[lang].loading;
     updateDay();
 
-    setTimeout(() => {
-      updateDay();
-      setInterval(updateDay, 24 * 60 * 60 * 1000);
-    }, getMsUntilNextMidnightJST());
+    // 毎秒更新
+    setInterval(updateDay, 1000);
   </script>
 </body>
 </html>
