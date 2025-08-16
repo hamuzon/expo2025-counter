@@ -27,18 +27,29 @@
   #hourDisplay,#remainDisplay { font-size:1.2rem; font-weight:500; color:#80deea; margin-bottom:1rem; letter-spacing:0.05em; }
   #remainDisplay { margin-bottom:3rem; }
   .footer { font-size:0.9rem; color:#4dd0e1; letter-spacing:0.1em; user-select:none; }
-  .lang-toggle {
-    position:absolute; top:12px; right:12px; background:rgba(0,229,255,0.15);
-    border:none; border-radius:20px; color:#00e5ff; font-weight:600; padding:6px 14px;
-    cursor:pointer; font-family:'Roboto',sans-serif; transition:background-color 0.3s ease;
+  .lang-toggle, .year-link {
+    background: rgba(0,229,255,0.15); border:none; border-radius:20px; color:#00e5ff;
+    font-weight:600; padding:6px 14px; cursor:pointer; font-family:'Roboto',sans-serif; transition:0.3s;
+    margin:0 4px;
   }
-  .lang-toggle:hover { background: rgba(0,229,255,0.3); }
-  @media(max-width:480px){.container{padding:2rem 2rem; max-width:320px;}h1{font-size:2rem;}#dayDisplay{font-size:2rem;margin-bottom:1rem;}#hourDisplay,#remainDisplay{font-size:1rem;margin-bottom:1rem;}h2{font-size:1rem;margin-bottom:1.5rem;}}
+  .lang-toggle:hover, .year-link:hover { background: rgba(0,229,255,0.3); }
+  .year-links { margin-bottom:1rem; }
+  @media(max-width:480px){
+    .container{padding:2rem 2rem; max-width:320px;}
+    h1{font-size:2rem;}#dayDisplay{font-size:2rem;margin-bottom:1rem;}
+    #hourDisplay,#remainDisplay{font-size:1rem;margin-bottom:1rem;}
+    h2{font-size:1rem;margin-bottom:1.5rem;}
+  }
 </style>
 </head>
 <body>
 <div class="container" role="main" aria-live="polite">
-  <button class="lang-toggle" aria-label="Toggle Language">EN</button>
+  <div class="year-links">
+    <button class="year-link" onclick="switchYear('2025')">2025</button>
+    <button class="year-link" onclick="switchYear('2027')">2027</button>
+    <button class="year-link" onclick="switchYear('2030')">2030</button>
+    <button class="lang-toggle" aria-label="Toggle Language">EN</button>
+  </div>
   <h1 id="title">読み込み中…</h1>
   <h2 id="subtitle"></h2>
   <p id="dayDisplay">読み込み中…</p>
@@ -48,13 +59,13 @@
 </div>
 
 <script>
-const path = window.location.pathname;
-const year = path.replace("/","") || "2025"; // デフォルト2025
+let year = window.location.pathname.replace("/","") || "2025";
+let lang='jp';
 
 const expoDates = {
   "2025": { start: "2025-04-13T00:00:00+09:00", end: "2025-10-13T00:00:00+09:00" },
-  "2027": { start: "2027-04-01T00:00:00+09:00", end: "2027-07-01T00:00:00+09:00" }, // 仮日
-  "2030": { start: "2030-04-01T00:00:00+03:00", end: "2030-10-01T00:00:00+03:00" }   // リヤドUTC+3
+  "2027": { start: "2027-04-01T00:00:00+09:00", end: "2027-07-01T00:00:00+09:00" },
+  "2030": { start: "2030-04-01T00:00:00+03:00", end: "2030-10-01T00:00:00+03:00" }
 };
 
 const expoTitles = {
@@ -63,7 +74,6 @@ const expoTitles = {
   "2030": { jp:"2030 リヤド万博", en:"Expo 2030 Riyadh" }
 };
 
-let lang='jp';
 const dayDisplay = document.getElementById("dayDisplay");
 const hourDisplay = document.getElementById("hourDisplay");
 const remainDisplay = document.getElementById("remainDisplay");
@@ -73,28 +83,18 @@ const footerEl = document.getElementById("footer");
 const langToggleBtn = document.querySelector(".lang-toggle");
 
 const texts = {
-  jp:{
-    subtitle:"開催からの経過日数カウント",
-    loading:"読み込み中…",
-    notStarted:"万博はまだ始まっていません。",
-    ended:"万博は終了しました。",
-    dayCount: day => `今日は万博の${day}日目です。`,
-    timeSinceStart: (d,h,m,s) => `開催開始から経過した時間：${d}日 ${h}時間${m}分${s}秒`,
-    remainToStart: (d,h,m,s) => `開始まで：${d}日 ${h}時間${m}分${s}秒`,
-    remainToEnd: (d,h,m,s) => `終了まで：${d}日 ${h}時間${m}分${s}秒`,
-    toggleLabel:"EN"
-  },
-  en:{
-    subtitle:"Days Since Opening",
-    loading:"Loading...",
-    notStarted:"The Expo hasn't started yet.",
-    ended:"The Expo has ended.",
-    dayCount: day => `Today is day ${day} of the Expo.`,
-    timeSinceStart: (d,h,m,s) => `Time since opening: ${d}d ${h}h ${m}m ${s}s`,
-    remainToStart: (d,h,m,s) => `Time until opening: ${d}d ${h}h ${m}m ${s}s`,
-    remainToEnd: (d,h,m,s) => `Time until closing: ${d}d ${h}h ${m}m ${s}s`,
-    toggleLabel:"JP"
-  }
+  jp:{ subtitle:"開催からの経過日数カウント", loading:"読み込み中…", notStarted:"万博はまだ始まっていません。", ended:"万博は終了しました。",
+       dayCount: day => `今日は万博の${day}日目です。`,
+       timeSinceStart: (d,h,m,s)=>`開催開始から経過した時間：${d}日 ${h}時間${m}分${s}秒`,
+       remainToStart: (d,h,m,s)=>`開始まで：${d}日 ${h}時間${m}分${s}秒`,
+       remainToEnd: (d,h,m,s)=>`終了まで：${d}日 ${h}時間${m}分${s}秒`,
+       toggleLabel:"EN"},
+  en:{ subtitle:"Days Since Opening", loading:"Loading...", notStarted:"The Expo hasn't started yet.", ended:"The Expo has ended.",
+       dayCount: day => `Today is day ${day} of the Expo.`,
+       timeSinceStart: (d,h,m,s)=>`Time since opening: ${d}d ${h}h ${m}m ${s}s`,
+       remainToStart: (d,h,m,s)=>`Time until opening: ${d}d ${h}h ${m}m ${s}s`,
+       remainToEnd: (d,h,m,s)=>`Time until closing: ${d}d ${h}h ${m}m ${s}s`,
+       toggleLabel:"JP"}
 };
 
 function formatRemaining(ms){
@@ -144,11 +144,18 @@ function updateTexts(){
   titleEl.textContent=expoTitles[year][lang];
   subtitleEl.textContent=texts[lang].subtitle;
   langToggleBtn.textContent=texts[lang].toggleLabel;
-  footerEl.textContent=`開催期間: ${expoDates[year].start.replace("T00:00:00+09:00","")} ～ ${expoDates[year].end.replace("T00:00:00+09:00","")}`;
+  footerEl.textContent=`開催期間: ${expoDates[year].start.split("T")[0]} ～ ${expoDates[year].end.split("T")[0]}`;
 }
 
 function toggleLanguage(){
   lang=(lang==='jp'?'en':'jp');
+  updateTexts();
+  updateDay();
+}
+
+function switchYear(y){
+  year=y;
+  history.replaceState(null,null,'/'+y);
   updateTexts();
   updateDay();
 }
