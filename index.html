@@ -278,5 +278,22 @@
     updateDay();
     setInterval(updateDay, 1000);
   </script>
+  <script>
+(function() {
+  const hostname = location.hostname;
+  const footerEl = document.getElementById("footer");
+  if (!footerEl) return;
+
+  let extraLinkHTML = "";
+
+  if (hostname === "hamuzon.github.io") {
+    extraLinkHTML = `<br><a class="link" href="https://hamuzon.github.io/expo" target="_blank" rel="noopener noreferrer">Expo</a>`;
+  } else if (hostname.includes("hamusata.f5.si")) {
+    extraLinkHTML = `<br><a class="link" href="https://expo.hamusata.f5.si" target="_blank" rel="noopener noreferrer">Expo</a>`;
+  }
+
+  footerEl.innerHTML += extraLinkHTML;
+})();
+</script>
 </body>
 </html>
