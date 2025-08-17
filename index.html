@@ -1,106 +1,112 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Expo 2025 Countdown</title>
-  <meta name="description" content="Expo 2025(2025年大阪万博)の開催日数カウントと終了後の経過時間を表示します。" />
-  <link rel="icon" href="icon.png" type="image/png" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>大阪・関西万博 2025 Countdown</title>
+<meta name="description" content="大阪・関西万博 2025の開催日数カウントと終了後の経過時間を表示します。" />
+<link rel="icon" href="icon.png" type="image/png" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
 
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      font-family: 'Roboto', sans-serif;
-      color: #e0f7fa;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:1rem;
-    }
+  * { margin:0; padding:0; box-sizing:border-box; }
 
-    .container {
-      background: rgba(255,255,255,0.07);
-      border-radius:24px;
-      padding:3rem 4rem;
-      max-width:420px;
-      width:100%;
-      box-shadow:0 0 20px rgba(0,229,255,0.5);
-      text-align:center;
-      position:relative;
-    }
+  body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:1rem;
+  }
 
-    h1 {
-      font-family:'Orbitron', sans-serif;
-      font-size:2.8rem;
-      color:#00e5ff;
-      text-shadow:0 0 8px #00e5ff,0 0 20px #00e5ff;
-      margin-bottom:0.3rem;
-    }
+  .container {
+    background: rgba(255,255,255,0.05);
+    border-radius:24px;
+    padding:3rem 4rem;
+    max-width:420px;
+    width:100%;
+    box-shadow:0 0 25px rgba(255,215,0,0.6);
+    text-align:center;
+    position:relative;
+  }
 
-    h2 {
-      font-family:'Orbitron', sans-serif;
-      font-size:1.1rem;
-      color:#80deea;
-      letter-spacing:0.15em;
-      margin-bottom:2rem;
-    }
+  h1 {
+    font-family:'Orbitron', sans-serif;
+    font-size:2.8rem;
+    color:#ff0000; /* 公式赤カラー */
+    text-shadow: 0 0 8px #ff4d4d,0 0 20px #ff9999;
+    margin-bottom:0.3rem;
+  }
 
-    #dayDisplay {
-      font-size:2.5rem;
-      font-weight:700;
-      color:#00fff7;
-      text-shadow:0 0 5px #00fff7,0 0 15px #00fff7;
-      margin-bottom:1.2rem;
-    }
+  h2 {
+    font-family:'Orbitron', sans-serif;
+    font-size:1.1rem;
+    color:#00aaff; /* 公式青カラー */
+    letter-spacing:0.15em;
+    margin-bottom:2rem;
+  }
 
-    #hourDisplay,#remainDisplay {
-      font-size:1.2rem;
-      font-weight:500;
-      color:#80deea;
-      margin-bottom:1rem;
-      letter-spacing:0.05em;
-    }
-    #remainDisplay { margin-bottom:3rem; }
+  #dayDisplay {
+    font-size:2.5rem;
+    font-weight:700;
+    color:#ffd700; /* 公式黄カラー */
+    text-shadow:0 0 5px #ffff66,0 0 15px #ffffaa;
+    margin-bottom:1.2rem;
+  }
 
-    .footer {
-      font-size:0.9rem;
-      color:#4dd0e1;
-      letter-spacing:0.1em;
-      user-select:none;
-    }
+  #hourDisplay,#remainDisplay {
+    font-size:1.2rem;
+    font-weight:500;
+    color:#00ffff;
+    margin-bottom:1rem;
+    letter-spacing:0.05em;
+  }
+  #remainDisplay { margin-bottom:3rem; }
 
-    .lang-toggle {
-      position:absolute;
-      top:12px;
-      right:12px;
-      background:rgba(0,229,255,0.15);
-      border:none;
-      border-radius:20px;
-      color:#00e5ff;
-      font-weight:600;
-      padding:6px 14px;
-      cursor:pointer;
-      font-family:'Roboto', sans-serif;
-      transition:background-color 0.3s ease;
-    }
-    .lang-toggle:hover { background:rgba(0,229,255,0.3); }
+  .footer {
+    font-size:0.9rem;
+    color:#4dd0e1;
+    letter-spacing:0.1em;
+    user-select:none;
+  }
 
-    @media (max-width:480px){
-      .container { padding:2rem 2rem; max-width:320px; }
-      h1 { font-size:2rem; }
-      #dayDisplay { font-size:2rem; margin-bottom:1rem; }
-      #hourDisplay,#remainDisplay { font-size:1rem; margin-bottom:1rem; }
-      h2 { font-size:1rem; margin-bottom:1.5rem; }
-    }
-  </style>
+  .lang-toggle {
+    position:absolute;
+    top:12px;
+    right:12px;
+    background:rgba(255,215,0,0.15);
+    border:none;
+    border-radius:20px;
+    color:#ffff00;
+    font-weight:600;
+    padding:6px 14px;
+    cursor:pointer;
+    font-family:'Roboto', sans-serif;
+    transition:background-color 0.3s ease;
+  }
+  .lang-toggle:hover { background:rgba(255,215,0,0.3); }
+
+  a, a:visited, a:hover, a:active {
+    color:#ff69b4; /* ピンクなど公式系カラー */
+    text-decoration:none;
+  }
+
+  @media (max-width:480px){
+    .container { padding:2rem 2rem; max-width:320px; }
+    h1 { font-size:2rem; }
+    #dayDisplay { font-size:2rem; margin-bottom:1rem; }
+    #hourDisplay,#remainDisplay { font-size:1rem; margin-bottom:1rem; }
+    h2 { font-size:1rem; margin-bottom:1.5rem; }
+  }
+</style>
 </head>
 <body>
   <div class="container" role="main" aria-live="polite">
     <button class="lang-toggle" aria-label="Toggle Language">EN</button>
-    <h1 id="title"><span id="title-text">2025 日本万博</span></h1>
+    <h1 id="title"><span id="title-text">大阪・関西万博 2025</span></h1>
     <h2 id="subtitle">開催からの経過日数カウント</h2>
     <p id="dayDisplay">読み込み中…</p>
     <p id="hourDisplay"></p>
@@ -109,21 +115,21 @@
   </div>
 
   <script>
-    const startDateJST = new Date(Date.UTC(2025,3,12,15,0,0)); // 4/13 00:00 JST
-    const endDateJST = new Date(Date.UTC(2025,9,12,15,0,0));   // 10/13 00:00 JST
+    const startDateJST = new Date(Date.UTC(2025,3,12,15,0,0));
+    const endDateJST = new Date(Date.UTC(2025,9,12,15,0,0));
 
-    const dayDisplay = document.getElementById("dayDisplay");
-    const hourDisplay = document.getElementById("hourDisplay");
-    const remainDisplay = document.getElementById("remainDisplay");
-    const titleText = document.getElementById("title-text");
-    const subtitle = document.getElementById("subtitle");
-    const langToggleBtn = document.querySelector(".lang-toggle");
+    const dayDisplay=document.getElementById("dayDisplay");
+    const hourDisplay=document.getElementById("hourDisplay");
+    const remainDisplay=document.getElementById("remainDisplay");
+    const titleText=document.getElementById("title-text");
+    const subtitle=document.getElementById("subtitle");
+    const langToggleBtn=document.querySelector(".lang-toggle");
 
-    let lang = 'jp';
+    let lang='jp';
 
-    const texts = {
-      jp: {
-        title:"2025 日本万博",
+    const texts={
+      jp:{
+        title:"大阪・関西万博 2025",
         subtitle:"開催からの経過日数カウント",
         loading:"読み込み中…",
         notStarted:"万博はまだ始まっていません。",
@@ -135,7 +141,7 @@
         toggleLabel:"EN"
       },
       en:{
-        title:"Expo 2025 Japan",
+        title:"Expo 2025 Osaka/Kansai",
         subtitle:"Days Since Opening",
         loading:"Loading...",
         notStarted:"The Expo hasn't started yet.",
@@ -159,7 +165,7 @@
     function updateDay(){
       const now=new Date();
       const utc=now.getTime()+(now.getTimezoneOffset()*60000);
-      const jstTime=new Date(utc + 9*60*60*1000);
+      const jstTime=new Date(utc+9*60*60*1000);
       const today=new Date(jstTime.getFullYear(),jstTime.getMonth(),jstTime.getDate());
       const t=texts[lang];
 
@@ -178,11 +184,9 @@
       }else{
         const diffDays=Math.floor((today-startDateJST)/(1000*60*60*24))+1;
         dayDisplay.textContent=t.dayCount(diffDays);
-
         const elapsedMs=jstTime-startDateJST;
         const {d,h,m,s}=formatRemaining(elapsedMs);
         hourDisplay.textContent=t.timeSinceStart(d,h,m,s);
-
         const remainMs=endDateJST-jstTime;
         const remain=formatRemaining(remainMs);
         remainDisplay.textContent=t.remainToEnd(remain.d,remain.h,remain.m,remain.s);
