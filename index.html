@@ -142,10 +142,10 @@ a,a:visited,a:hover,a:active { color:#00bcd4; text-decoration:none; }
 </script>
 
 <script>
-// ✅ Expo 2025 開幕: 2025年4月13日14:00 JST
-// ✅ Expo 2025 閉幕: 2025年10月12日21:00 JST
-const startDateJST=new Date(Date.UTC(2025,3,13,5,0,0)); // 14:00 JST
-const endDateJST=new Date(Date.UTC(2025,9,12,12,0,0)); // 21:00 JST
+// ✅ Expo 2025 開幕: 2025年4月13日 14:00 JST
+// ✅ Expo 2025 閉幕: 2025年10月13日 21:00 JST
+const startDateJST = new Date(Date.UTC(2025, 3, 13, 5, 0, 0));  // JST 14:00 → UTC 5:00
+const endDateJST   = new Date(Date.UTC(2025, 9, 13, 12, 0, 0)); // JST 21:00 → UTC 12:00
 
 const dayDisplay=document.getElementById("dayDisplay");
 const hourDisplay=document.getElementById("hourDisplay");
