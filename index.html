@@ -142,8 +142,11 @@ a,a:visited,a:hover,a:active { color:#00bcd4; text-decoration:none; }
 </script>
 
 <script>
-const startDateJST=new Date(Date.UTC(2025,3,12,15,0,0));
-const endDateJST=new Date(Date.UTC(2025,9,12,12,0,0));
+// ✅ Expo 2025 開幕: 2025年4月13日14:00 JST
+// ✅ Expo 2025 閉幕: 2025年10月12日21:00 JST
+const startDateJST=new Date(Date.UTC(2025,3,13,5,0,0)); // 14:00 JST
+const endDateJST=new Date(Date.UTC(2025,9,12,12,0,0)); // 21:00 JST
+
 const dayDisplay=document.getElementById("dayDisplay");
 const hourDisplay=document.getElementById("hourDisplay");
 const remainDisplay=document.getElementById("remainDisplay");
@@ -161,7 +164,7 @@ const texts={
     ended:"万博は終了しました。",
     dayCount:day=>`今日は万博の${day}日目です。`,
     timeSinceStart:(d,h,m,s)=>`開催開始から経過した時間：${d}日 ${h}時間${m}分${s}秒`,
-    remainToStart:(d,h,m,s)=>`再開まで：${d}日 ${h}時間${m}分${s}秒`,
+    remainToStart:(d,h,m,s)=>`開幕まで：${d}日 ${h}時間${m}分${s}秒`,
     remainToEnd:(d,h,m,s)=>`終了まで：${d}日 ${h}時間${m}分${s}秒`,
     toggleLabel:"EN"
   },
