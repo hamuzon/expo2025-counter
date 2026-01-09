@@ -77,17 +77,24 @@ a {
   let redirectURL = "";
   let footerLink = "#";
 
-  // ホスト名に応じてリダイレクト先を設定
-  if (hostname === "hamuzon.github.io") {
-    redirectURL = "https://hamuzon.github.io/expo/";
-    footerLink = "https://hamuzon.github.io/expo/";
-  } else if (hostname.includes("hamusata.f5.si")) {
-    redirectURL = "https://expo.hamusata.f5.si/";
-    footerLink = "https://expo.hamusata.f5.si/";
-  } else if (hostname.includes("hamuzon-jp.f5.si")) {
-    redirectURL = "https://expo.hamuzon-jp.f5.si/";
-    footerLink = "https://expo.hamuzon-jp.f5.si/";
-  }
+// ホスト名に応じてリダイレクト先を設定
+if (hostname === "hamuzon.github.io") {
+  redirectURL = "https://hamuzon.github.io/expo/";
+  footerLink = "https://hamuzon.github.io/expo/";
+} else if (hostname.includes("hamusata.f5.si")) {
+  redirectURL = "https://expo.hamusata.f5.si/";
+  footerLink = "https://expo.hamusata.f5.si/";
+} else if (hostname.includes("hamuzon-jp.f5.si")) {
+  redirectURL = "https://expo.hamuzon-jp.f5.si/";
+  footerLink = "https://expo.hamuzon-jp.f5.si/";
+} else if (
+  hostname === "expo-aic.pages.dev" ||
+  hostname === "expo2025-counter.expo-aic.pages.dev"
+) {
+  redirectURL = "https://expo-aic.pages.dev/";
+  footerLink = "https://expo-aic.pages.dev/";
+}
+
 
   // 自動リダイレクト（5秒後）
   if (redirectURL) {
