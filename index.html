@@ -84,17 +84,13 @@ if (hostname === "hamuzon.github.io") {
 } else if (hostname.includes("hamusata.f5.si")) {
   redirectURL = "https://expo.hamusata.f5.si/";
   footerLink = "https://expo.hamusata.f5.si/";
-} else if (hostname.includes("hamuzon-jp.f5.si")) {
+} else if  {
   redirectURL = "https://expo.hamuzon-jp.f5.si/";
   footerLink = "https://expo.hamuzon-jp.f5.si/";
-} else if (
-  hostname === "expo-aic.pages.dev" ||
-  hostname === "expo2025-counter.expo-aic.pages.dev"
-) {
+} else if (hostname.endsWith("expo-aic.pages.dev")) {
   redirectURL = "https://expo-aic.pages.dev/";
   footerLink = "https://expo-aic.pages.dev/";
 }
-
 
   // 自動リダイレクト（5秒後）
   if (redirectURL) {
