@@ -39,6 +39,7 @@ h1 {
   font-size: 2.5rem;
   background: linear-gradient(90deg,#ff0000,#ffcc00,#0066ff);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
   text-shadow: 0 0 8px rgba(255,255,255,0.3),0 0 20px rgba(255,255,255,0.2);
   margin-bottom: 1rem;
@@ -96,11 +97,6 @@ if (hostname === "hamuzon.github.io") {
 }
 
 
-  // 自動リダイレクト（5秒後）
-  if (redirectURL) {
-    setTimeout(() => { window.location.href = redirectURL; }, 5000);
-  }
-
   // JS有効時にリンク更新
   document.addEventListener("DOMContentLoaded", () => {
     const fallback = document.getElementById("fallback-link");
@@ -111,6 +107,20 @@ if (hostname === "hamuzon.github.io") {
 
     const footerAnchor = document.getElementById("footer-link");
     if (footerAnchor && footerLink) footerAnchor.href = footerLink;
+
+    // 自動リダイレクト（カウントダウン付き）
+    if (redirectURL) {
+      let timeLeft = 5;
+      const countdownEl = document.getElementById("countdown");
+      const timer = setInterval(() => {
+        timeLeft--;
+        if (countdownEl) countdownEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          window.location.href = redirectURL;
+        }
+      }, 1000);
+    }
   });
 })();
 </script>
@@ -120,7 +130,7 @@ if (hostname === "hamuzon.github.io") {
   <div class="container">
     <h1>Redirecting to Expo 2025</h1>
     <p>
-      Automatic redirect in 5 seconds.<br>
+      Automatic redirect in <span id="countdown">5</span> seconds.<br>
       If your browser does not support JavaScript, click the link below:<br><br>
       <a id="fallback-link" href="#">Go to Expo</a>
     </p>
