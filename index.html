@@ -57,6 +57,12 @@ a {
   text-decoration: underline;
 }
 
+.domain-links {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+
 .footer {
   font-size: 0.9rem;
   color: #4dd0e1;
@@ -75,8 +81,8 @@ a {
 <script>
 (function() {
   const hostname = location.hostname;
-  let redirectURL = "";
-  let footerLink = "#";
+  let redirectURL = "https://expo-aic.pages.dev/";
+  let footerLink = "https://expo-aic.pages.dev/";
 
 // ホスト名に応じてリダイレクト先を設定
 if (hostname === "hamuzon.github.io") {
@@ -131,20 +137,29 @@ if (hostname === "hamuzon.github.io") {
     <h1>Redirecting to Expo 2025</h1>
     <p>
       Automatic redirect in <span id="countdown">5</span> seconds.<br>
-      If your browser does not support JavaScript, click the link below:<br><br>
-      <a id="fallback-link" href="#">Go to Expo</a>
+      If automatic redirect does not work, click your domain link:<br><br>
+      <a id="fallback-link" href="https://expo-aic.pages.dev/">Go to Expo</a>
+      <span class="domain-links">
+        <a href="https://hamuzon.github.io/expo/">hamuzon.github.io 用</a>
+        <a href="https://expo.hamusata.f5.si/">hamusata.f5.si 用</a>
+        <a href="https://expo.hamuzon-jp.f5.si/">hamuzon-jp.f5.si 用</a>
+        <a href="https://expo-aic.pages.dev/">pages.dev 用</a>
+      </span>
     </p>
 
     <noscript>
       <p style="color:#ffcccb;">
         JavaScript is disabled.<br>
-        Please click the link to go to the Expo site:<br><br>
-        <a id="noscript-link" href="#">Go to Expo</a>
+        Please click the correct link for your domain:<br><br>
+        <a href="https://hamuzon.github.io/expo/">hamuzon.github.io 用</a><br>
+        <a href="https://expo.hamusata.f5.si/">hamusata.f5.si 用</a><br>
+        <a href="https://expo.hamuzon-jp.f5.si/">hamuzon-jp.f5.si 用</a><br>
+        <a id="noscript-link" href="https://expo-aic.pages.dev/">pages.dev 用</a>
       </p>
     </noscript>
 
     <div class="footer">
-      &copy; 2025 <a id="footer-link" class="link" href="#">Expo</a>
+      &copy; 2025 <a id="footer-link" class="link" href="https://expo-aic.pages.dev/">Expo</a>
     </div>
   </div>
 </body>
