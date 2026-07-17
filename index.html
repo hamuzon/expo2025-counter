@@ -76,25 +76,25 @@ a {
 <script>
 (function() {
   const hostname = location.hostname;
-  let redirectURL = "https://expo-countdown.pages.dev/";
-  let footerLink = "https://expo-countdown.pages.dev/";
+  let redirectURL = "https://expo-countdown.pages.dev/2025";
+  let footerLink = "https://expo-countdown.pages.dev/2025";
 
 // ホスト名に応じてリダイレクト先を設定
 if (hostname === "hamuzon.github.io") {
-  redirectURL = "https://hamuzon.github.io/expo-countdown/";
-  footerLink = "https://hamuzon.github.io/expo-countdown/";
+  redirectURL = "https://hamuzon.github.io/expo-countdown/2025";
+  footerLink = "https://hamuzon.github.io/expo-countdown/2025";
 
 } else if (hostname.includes("hamusata.f5.si")) {
-  redirectURL = "https://expo-countdown.hamusata.f5.si/";
+  redirectURL = "https://expo-countdown.hamusata.f5.si/2025";
   footerLink = "https://expo-countdown.hamusata.f5.si/";
 
 } else if (hostname.includes("hamuzon-jp.f5.si")) {
-  redirectURL = "https://expo-countdown.hamuzon-jp.f5.si/";
-  footerLink = "https://expo-countdown.hamuzon-jp.f5.si/";
+  redirectURL = "https://expo-countdown.hamuzon-jp.f5.si/2025";
+  footerLink = "https://expo-countdown.hamuzon-jp.f5.si/2025";
 
 } else if (hostname.endsWith("expo2025-counter.pages.dev")) {
-  redirectURL = "https://expo-countdown.pages.dev/";
-  footerLink = "https://expo-countdown.pages.dev/";
+  redirectURL = "https://expo-countdown.pages.dev/2025";
+  footerLink = "https://expo-countdown.pages.dev/2025";
 }
 
 
@@ -133,19 +133,19 @@ if (hostname === "hamuzon.github.io") {
     <p>
       Automatic redirect in <span id="countdown">5</span> seconds.<br>
       If your browser does not support JavaScript, click the link below:<br><br>
-      <a id="fallback-link" href="https://expo-countdown.pages.dev/">Go to Expo</a>
+      <a id="fallback-link" href="https://expo-countdown.pages.dev/2025">Go to Expo</a>
     </p>
 
     <noscript>
       <p style="color:#ffcccb;">
         JavaScript is disabled.<br>
         Please click the link to go to the Expo site:<br><br>
-        <a id="noscript-link" href="https://expo-countdown.pages.dev/">Go to Expo</a>
+        <a id="noscript-link" href="https://expo-countdown.pages.dev/2025">Go to Expo</a>
       </p>
     </noscript>
 
     <div class="footer">
-      &copy; 2025 <a id="footer-link" class="link" href="https://expo-countdown.pages.dev/">Expo</a>
+      &copy; 2025 <a id="footer-link" class="link" href="https://expo-countdown.pages.dev/2025">Expo</a>
     </div>
   </div>
 </body>
