@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Expo 2025 Redirect</title>
-<meta name="description" content="Redirecting to Expo 2025 sites">
-<meta http-equiv="refresh" content="5;url=https://expo-countdown.pages.dev/">
+<title>大阪・関西万博 2025 リダイレクト - Expo 2025 Redirect</title>
+<meta name="description" content="大阪・関西万博 2025 サイトへのリダイレクト / Redirecting to Expo 2025 sites">
 <link rel="icon" href="icon.png" type="image/png">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&family=Noto+Sans+JP:wght@400;700&display=swap');
 
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
   background: #0a1a2b;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Noto Sans JP', 'Roboto', sans-serif;
   color: #fff;
   min-height: 100vh;
   display: flex;
@@ -29,33 +28,66 @@ body {
 .container {
   background: rgba(255,255,255,0.05);
   border-radius: 24px;
-  padding: 3rem 4rem;
-  max-width: 420px;
+  padding: 3rem 3.5rem;
+  max-width: 440px;
   width: 100%;
   box-shadow: 0 0 30px rgba(255,215,0,0.6);
 }
 
 h1 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.5rem;
+  font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+  font-size: 2.1rem;
   background: linear-gradient(90deg,#ff0000,#ffcc00,#0066ff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   text-shadow: 0 0 8px rgba(255,255,255,0.3),0 0 20px rgba(255,255,255,0.2);
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.25;
+}
+
+.sub-title {
+  display: block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  margin-top: 0.4rem;
 }
 
 p {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: #80deea;
   margin-bottom: 1rem;
   line-height: 1.5;
 }
 
+.en-text {
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.92rem;
+  color: #b2ebf2;
+  margin-top: 0.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.fallback-area {
+  display: block;
+  margin-top: 0.6rem;
+}
+
+.noscript-text {
+  color: #ffcccb;
+  margin-top: 1rem;
+}
+
 a {
   color: #00bcd4;
   text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #80deea;
 }
 
 .footer {
@@ -63,13 +95,15 @@ a {
   color: #4dd0e1;
   letter-spacing: 0.1em;
   margin-top: 2rem;
+  -webkit-user-select: none;
   user-select: none;
 }
 
 @media (max-width:480px){
-  .container{padding:2rem; max-width:320px;}
-  h1{font-size:2rem;}
-  p{font-size:1rem;}
+  .container{padding:2rem 1.5rem; max-width:320px;}
+  h1{font-size:1.6rem;}
+  .sub-title{font-size:1.05rem;}
+  p{font-size:0.95rem;}
 }
 </style>
 
@@ -79,24 +113,30 @@ a {
   let redirectURL = "https://expo-countdown.pages.dev/2025";
   let footerLink = "https://expo-countdown.pages.dev/2025";
 
-// ホスト名に応じてリダイレクト先を設定
-if (hostname === "hamuzon.github.io") {
-  redirectURL = "https://hamuzon.github.io/expo-countdown/2025";
-  footerLink = "https://hamuzon.github.io/expo-countdown/2025";
+  // ホスト名に応じてリダイレクト先を設定
+  if (hostname === "hamuzon.github.io") {
+    redirectURL = "https://hamuzon.github.io/expo-countdown/2025";
+    footerLink = "https://hamuzon.github.io/expo-countdown/2025";
 
-} else if (hostname.includes("hamusata.f5.si")) {
-  redirectURL = "https://expo-countdown.hamusata.f5.si/2025";
-  footerLink = "https://expo-countdown.hamusata.f5.si/2025";
+  } else if (hostname.includes("hamusata.f5.si")) {
+    redirectURL = "https://expo-countdown.hamusata.f5.si/2025";
+    footerLink = "https://expo-countdown.hamusata.f5.si/2025";
 
-} else if (hostname.includes("hamuzon-jp.f5.si")) {
-  redirectURL = "https://expo-countdown.hamuzon-jp.f5.si/2025";
-  footerLink = "https://expo-countdown.hamuzon-jp.f5.si/2025";
+  } else if (hostname.includes("hamuzon-jp.f5.si")) {
+    redirectURL = "https://expo-countdown.hamuzon-jp.f5.si/2025";
+    footerLink = "https://expo-countdown.hamuzon-jp.f5.si/2025";
 
-} else if (hostname.endsWith("expo2025-counter.pages.dev")) {
-  redirectURL = "https://expo-countdown.pages.dev/2025";
-  footerLink = "https://expo-countdown.pages.dev/2025";
-}
+  } else if (hostname.endsWith("expo2025-counter.pages.dev")) {
+    redirectURL = "https://expo-countdown.pages.dev/2025";
+    footerLink = "https://expo-countdown.pages.dev/2025";
+  }
 
+  // クエリパラメータでnoredirectが指定されているか確認
+  const urlStr = window.location.href;
+  const urlParams = new URLSearchParams(window.location.search);
+  const isNoRedirect =
+    (urlParams.has("noredirect") && urlParams.get("noredirect") !== "0" && urlParams.get("noredirect") !== "false") ||
+    /[?&]noredirect(=(1|true|yes)|(?![^&#]*=)|&|#|$)/i.test(urlStr);
 
   // JS有効時にリンク更新
   document.addEventListener("DOMContentLoaded", () => {
@@ -109,13 +149,24 @@ if (hostname === "hamuzon.github.io") {
     const footerAnchor = document.getElementById("footer-link");
     if (footerAnchor && footerLink) footerAnchor.href = footerLink;
 
+    const redirectMessageEl = document.getElementById("redirect-message");
+
+    if (isNoRedirect) {
+      if (redirectMessageEl) {
+        redirectMessageEl.innerHTML = '自動リダイレクトは無効化されています (noredirect)<br><span class="en-text">Automatic redirect is disabled (noredirect).</span>';
+      }
+      return;
+    }
+
     // 自動リダイレクト（カウントダウン付き）
     if (redirectURL) {
       let timeLeft = 5;
       const countdownEl = document.getElementById("countdown");
+      const countdownEnEl = document.getElementById("countdown-en");
       const timer = setInterval(() => {
         timeLeft--;
         if (countdownEl) countdownEl.textContent = timeLeft;
+        if (countdownEnEl) countdownEnEl.textContent = timeLeft;
         if (timeLeft <= 0) {
           clearInterval(timer);
           window.location.href = redirectURL;
@@ -129,23 +180,34 @@ if (hostname === "hamuzon.github.io") {
 </head>
 <body>
   <div class="container">
-    <h1>Redirecting to Expo 2025</h1>
+    <h1>
+      大阪・関西万博 2025<br>
+      <span class="sub-title">Redirecting to Expo 2025</span>
+    </h1>
+
     <p>
-      Automatic redirect in <span id="countdown">5</span> seconds.<br>
-      If your browser does not support JavaScript, click the link below:<br><br>
-      <a id="fallback-link" href="https://expo-countdown.pages.dev/2025">Go to Expo</a>
+      <span id="redirect-message">
+        <span id="countdown">5</span> 秒後に自動的にリダイレクトします。<br>
+        <span class="en-text">Automatic redirect in <span id="countdown-en">5</span> seconds.</span>
+      </span>
+      <span class="fallback-area">
+        自動で移動しない場合は以下のリンクをクリックしてください：<br>
+        <span class="en-text">If your browser does not redirect, click the link below:</span>
+        <a id="fallback-link" href="https://expo-countdown.pages.dev/2025">万博サイトへ移動 / Go to Expo</a>
+      </span>
     </p>
 
     <noscript>
-      <p style="color:#ffcccb;">
-        JavaScript is disabled.<br>
-        Please click the link to go to the Expo site:<br><br>
-        <a id="noscript-link" href="https://expo-countdown.pages.dev/2025">Go to Expo</a>
+      <p class="noscript-text">
+        JavaScriptが無効になっています。<br>
+        以下のリンクから万博サイトへアクセスしてください：<br>
+        <span class="en-text">JavaScript is disabled. Please click the link to go to the Expo site:</span>
+        <a id="noscript-link" href="https://expo-countdown.pages.dev/2025">万博サイトへ移動 / Go to Expo</a>
       </p>
     </noscript>
 
     <div class="footer">
-      &copy; 2025 <a id="footer-link" class="link" href="https://expo-countdown.pages.dev/2025">Expo</a>
+      &copy; 2025 <a id="footer-link" class="link" href="https://expo-countdown.pages.dev/2025">Expo 2025</a>
     </div>
   </div>
 </body>
