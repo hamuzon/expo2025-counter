@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>404 エラーコード - Error</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
 
   <style>
     :root {
@@ -50,11 +51,9 @@
       height: 100vh;
       text-align: center;
       padding: 2rem;
-      background-image: radial-gradient(
-        circle at center,
-        rgba(255, 255, 255, 0.05),
-        transparent 70%
-      );
+      background-image: radial-gradient(circle at center,
+          rgba(255, 255, 255, 0.05),
+          transparent 70%);
     }
 
     h1 {
@@ -98,6 +97,7 @@
       h1 {
         font-size: 3.5rem;
       }
+
       p {
         font-size: 1rem;
       }
@@ -113,7 +113,7 @@
 
   <script>
     // README/LICENSE へのアクセス（大文字小文字問わず）を判定してリダイレクト
-    (function() {
+    (function () {
       const path = window.location.pathname.toLowerCase();
       if (path.includes('readme') || path.includes('license')) {
         window.location.replace('./');
@@ -129,4 +129,5 @@
     });
   </script>
 </body>
+
 </html>
